@@ -1,0 +1,98 @@
+<mat-drawer-container class="chat-main">
+    <mat-drawer class="chat-drawer-history" #sideNav mode="side" opened="true">
+        <div fxLayout="column" fxLayoutGap="15%">
+            <div fxLayout="row" fxLayoutGap="4%" fxLayoutAlign="start center">
+                <button type="button" mat-icon-button (click)="sideNav.close(); showMenuIcon()"
+                    matTooltip="Close Drawer" *ngIf="sideNav.open">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <div fxFlex="60">
+                    <button type="button" mat-raised-button class="new-chat-button" (click)="createNewChat()">
+                        <mat-icon>open_in_new</mat-icon>
+                        <div>New Chat</div>
+                    </button>
+                </div>
+            </div>
+            <div fxLayout="column" fxLayoutGap="4%">
+                <div *ngFor="let title of chatTitles">
+                    <div class="chat-titles" >
+                        <div fxFlex="90" (click)="getAllChatHistory(title.titleUId)">
+                            {{title.titleName}}
+                        </div>
+                        <mat-icon fxFlex="10" (click)="deleteChatHistoryByTitleId(title.titleUId)">delete_outline</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-drawer>
+    <div style="padding: 1%;">
+        <div style="height: 3rem;">
+            <button type="button" mat-icon-button (click)="sideNav.open(); showMenuIcon()" matTooltip="Open Drawer"
+                *ngIf="this.isShowIcon">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <button type="button" mat-icon-button (click)="showLogTable()" matTooltip="Show Logs" *ngIf="this.logData">
+                <mat-icon>table_chart_outline</mat-icon>
+            </button>
+        </div>
+        <div class="chat-ui-main-container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="2%">
+            <div class="chat-messages-container full-width" #chatContainer>
+                <div *ngIf="chatHistory.titleName=='New Chat'" class="full-height" fxLayoutAlign="center center">
+                    <div fxLayout="column" fxLayoutGap="6%" fxLayoutAlign.lt-md="center center">
+                        <h2>Welcome to AI Chat!</h2>
+                        <p>Select the Time Period to download logs, and start asking questions
+                        </p>
+                        <mat-form-field appearance="outline" class="half-width">
+                            <mat-label>Select Date Range</mat-label>
+                            <mat-select [(value)]="fullDuration">
+                                <mat-option *ngFor="let item of periodOptions" [value]="item.value">
+                                    {{ item.displayName }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" *ngIf="fullDuration=='Custom'"
+                            class="date-picker-container half-width">
+                            <mat-label>Enter a date range</mat-label>
+                            <mat-date-range-input [rangePicker]="picker">
+                                <input matStartDate [(ngModel)]="startDate" placeholder="Start date">
+                                <input matEndDate [(ngModel)]="endDate" placeholder="End date">
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" class="half-width" (click)="downloadLogs()">Download
+                            Logs</button>
+                    </div>
+                </div>
+                <div *ngIf="chatHistory">
+                    <div *ngFor="let chat of chatHistory.chat" class="full-width" class="chat-history-padding">
+                        <!-- User Message -->
+                        <div fxLayout="row" fxLayoutAlign="end" class="full-width" style="margin-bottom:2%;">
+                            <div class="user-message">
+                                {{ chat.question }}
+                            </div>
+                        </div>
+                        <!-- AI Response (if available) -->
+                        <div *ngIf="!chat.answer" class="ai-message-loader">
+                            <div class="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <div *ngIf="chat.answer" class="ai-message" style="margin-bottom:2%;">
+                            {{ chat.answer }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 70%;">
+                <mat-form-field appearance="outline" fxFlex>
+                    <input matInput [(ngModel)]="message" (keydown.enter)="callAiModel()"
+                        placeholder="Type your query...">
+                    <mat-icon class="send-icon" (click)="callAiModel()">send</mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</mat-drawer-container>

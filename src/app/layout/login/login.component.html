@@ -1,0 +1,54 @@
+<div fxLayoutAlign="center center" class="main-login-container">
+    <div class="container" fxLayout="column">
+        <h1 id="form-title">Welcome to AI Chat</h1>
+
+        <div class="login-form" *ngIf="!isRegister">
+            <div class="form-group">
+                <label for="userName">User Name</label>
+                <input type="text" class="email" placeholder="Enter your user name" [(ngModel)]="loginModel.userName"
+                    required>
+            </div>
+            <div class="form-group">
+                <label for="password" >Password</label>
+                <input type="password" class="password" [(ngModel)]="loginModel.password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="button" (click)="login()">Login</button>
+            <div class="error-message" class="error-message"></div>
+            <div class="link">
+                <p>Don't have an account? <a class="show-register" (click)="toggleForms();">Register</a></p>
+            </div>
+        </div>
+        
+
+        <div class="register-form" *ngIf="isRegister">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="name" placeholder="Enter your name" [(ngModel)]="registerModel.name" required>
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" class="register-email" placeholder="Enter your email"
+                    [(ngModel)]="registerModel.email" required>
+            </div>
+            <div class="form-group">
+                <label for="register-userName">User Name</label>
+                <input type="text" class="register-email" placeholder="Enter your user name"
+                    [(ngModel)]="registerModel.userName" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" class="register-password" placeholder="Enter your password"
+                    [(ngModel)]="registerModel.password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" class="confirm-password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit" class="button" (click)="register()">Register</button>
+            <div class="register-error-message" class="error-message"></div>
+            <div class="link">
+                <p>Already have an account? <a class="show-login" (click)="toggleForms()">Login</a></p>
+            </div>
+        </div>
+    </div>
+</div>
