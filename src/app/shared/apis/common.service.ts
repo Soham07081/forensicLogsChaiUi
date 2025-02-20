@@ -8,7 +8,8 @@ import { environment } from '../../../environments/environment';
 })
 export class CommonService {
 
-  baseApiUrl = environment.appConstants.baseApiUrl
+  // baseApiUrl = environment.appConstants.baseApiUrl
+  baseApiUrl = environment.appConstants.deployedApiUrl
   bearerToken = localStorage.getItem('access_token');
   constructor(private http: HttpClient) { }
 
