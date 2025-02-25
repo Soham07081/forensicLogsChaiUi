@@ -25,6 +25,7 @@ export class LoginComponent {
     * purpose -to login the user
   *************************************************************************************/
   login() {
+    localStorage.clear();
     this.commonService.userLogin(this.loginModel).subscribe
       ((data: any) => {
         let response: any = data;
