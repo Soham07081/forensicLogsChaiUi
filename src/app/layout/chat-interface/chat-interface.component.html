@@ -15,11 +15,12 @@
             </div>
             <div fxLayout="column" fxLayoutGap="4%">
                 <div *ngFor="let title of chatTitles">
-                    <div class="chat-titles" >
+                    <div class="chat-titles">
                         <div fxFlex="90" (click)="getAllChatHistory(title.titleUId)">
                             {{title.titleName}}
                         </div>
-                        <mat-icon fxFlex="10" (click)="deleteChatHistoryByTitleId(title.titleUId)">delete_outline</mat-icon>
+                        <mat-icon fxFlex="10"
+                            (click)="deleteChatHistoryByTitleId(title.titleUId)">delete_outline</mat-icon>
                     </div>
                 </div>
             </div>
@@ -60,8 +61,11 @@
                             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-date-range-picker #picker></mat-date-range-picker>
                         </mat-form-field>
-                        <button mat-raised-button color="primary" class="half-width" (click)="downloadLogs()">Download
+                        <button mat-raised-button *ngIf="!isButtonLoading" [disabled]="isButtonLoading" color="primary"
+                            class="half-width" (click)="downloadLogs()">Download
                             Logs</button>
+                        <button mat-raised-button color="primary" class="half-width" *ngIf="isButtonLoading"><i
+                                class="fa-solid fa-circle-notch fa-spin" style="color: #ffffff;"></i></button>
                     </div>
                 </div>
                 <div *ngIf="chatHistory">

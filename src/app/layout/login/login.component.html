@@ -9,16 +9,20 @@
                     required>
             </div>
             <div class="form-group">
-                <label for="password" >Password</label>
-                <input type="password" class="password" [(ngModel)]="loginModel.password" placeholder="Enter your password" required>
+                <label for="password">Password</label>
+                <input type="password" class="password" [(ngModel)]="loginModel.password"
+                    placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="button" (click)="login()">Login</button>
+            <button type="submit" class="button" (click)="login()" *ngIf="!isButtonLoading"
+                [disabled]="isButtonLoading">Login</button>
+            <button class="button" *ngIf="isButtonLoading"><i class="fa-solid fa-circle-notch fa-spin"
+                    style="color: #ffffff;"></i></button>
             <div class="error-message" class="error-message"></div>
             <div class="link">
                 <p>Don't have an account? <a class="show-register" (click)="toggleForms();">Register</a></p>
             </div>
         </div>
-        
+
 
         <div class="register-form" *ngIf="isRegister">
             <div class="form-group">
@@ -44,11 +48,16 @@
                 <label for="confirm-password">Confirm Password</label>
                 <input type="password" class="confirm-password" placeholder="Confirm your password" required>
             </div>
-            <button type="submit" class="button" (click)="register()">Register</button>
+            <button type="submit" class="button" (click)="register()" *ngIf="!isButtonLoading"
+                [disabled]="isButtonLoading">Register</button>
+            <button class="button" *ngIf="isButtonLoading"><i class="fa-solid fa-circle-notch fa-spin"
+                    style="color: #ffffff;"></i></button>
+            <div class="error-message" class="error-message"></div>
             <div class="register-error-message" class="error-message"></div>
             <div class="link">
                 <p>Already have an account? <a class="show-login" (click)="toggleForms()">Login</a></p>
             </div>
+
         </div>
     </div>
 </div>

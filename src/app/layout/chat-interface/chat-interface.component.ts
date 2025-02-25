@@ -1,9 +1,10 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonService } from '../../shared/apis/common.service';
 import { Router } from '@angular/router';
 import { ChatData, ChatEntry } from '../../core/model/chat.model';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LogTableComponent } from '../log-table/log-table.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-chat-interface',
@@ -12,6 +13,7 @@ import { LogTableComponent } from '../log-table/log-table.component';
 })
 export class ChatInterfaceComponent {
   logData: any;
+  isButtonLoading: boolean = false;
   constructor(public commonService: CommonService, public router: Router, public dialog: MatDialog,) {
 
   }
@@ -40,6 +42,15 @@ export class ChatInterfaceComponent {
 
   showMenuIcon() {
     this.isShowIcon = !this.isShowIcon;
+  }
+
+  private _snackBar = inject(MatSnackBar);
+  openSnackBar(message: string) {
+    this._snackBar.open(message, '', {
+      duration: 2000,
+      verticalPosition: 'top',
+      horizontalPosition: 'end'
+    });
   }
 
   /*************************************************************************************
@@ -127,6 +138,7 @@ export class ChatInterfaceComponent {
     let reqObj = {
       "duration": duration
     }
+    this.isButtonLoading = true
     this.commonService.getAllLogsByDateRange(reqObj).subscribe
       ((data: any) => {
         let response = data;
@@ -136,9 +148,13 @@ export class ChatInterfaceComponent {
           this.startDate = null
           this.endDate = null
           this.fullDuration = ""
+          this.openSnackBar("Logs Downloaded Successfully")
         }
+        this.isButtonLoading = false
+
       }, (error: any) => {
         console.log('Error while loading logs!', '');
+        this.isButtonLoading = false
       })
   }
 
@@ -192,14 +208,15 @@ export class ChatInterfaceComponent {
   }
 
 
-  deleteChatHistoryByTitleId(titleUId:any) {
-    let reqObj={
+  deleteChatHistoryByTitleId(titleUId: any) {
+    let reqObj = {
       "userID": this.userID,
       "titleUId": titleUId
     }
     this.commonService.deleteChatHistoryByTitleId(reqObj).subscribe
       ((data: any) => {
         this.getAllChatTitles()
+        this.openSnackBar("Chat Deleted Successfully")
       }, (error: any) => {
         console.log('Error while updating chat history!', '');
       })
